@@ -38,7 +38,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Acknowledgments
 
-- [CustomTkinter](https://github.com/Parvizimotto/CustomTkinter) library for customizing the Tkinter interface.
+- [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) library for customizing the Tkinter interface.
 - [Pillow (PIL)](https://python-pillow.org/) library for image handling.
 
 ## Screenshots
