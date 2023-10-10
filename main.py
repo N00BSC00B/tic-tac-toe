@@ -8,7 +8,7 @@ tk.set_default_color_theme("dark-blue")
 tk.deactivate_automatic_dpi_awareness()
 
 
-def resource_path(relative_path: str):
+def resource_path(relative_path: str) -> str:
     """Function to find the Path of the given file in Relative Path.
 
     Args:
@@ -17,7 +17,6 @@ def resource_path(relative_path: str):
     Returns:
         str: The Actual Path of the file.
     """
-
     try:
         base_path = sys._MEIPASS
     except Exception:
@@ -27,7 +26,14 @@ def resource_path(relative_path: str):
 
 
 class MessageBox:
-    def __init__(self, parent: tk.CTk, title, message):
+    def __init__(self, parent: tk.CTk, title: str, message: str) -> None:
+        """Class to create a message box.
+
+        Args:
+            parent (tk.CTk): The parent window.
+            title (str): The title of the message box.
+            message (str): The message to be displayed.
+        """
         self.parent = parent
         self.title = title
         self.message = message
@@ -35,7 +41,8 @@ class MessageBox:
 
         self.create_dialog()
 
-    def create_dialog(self):
+    def create_dialog(self) -> None:
+        """Function to create the message box."""
         self.dialog = tk.CTkToplevel(self.parent)
         self.dialog.title(self.title)
 
@@ -56,12 +63,18 @@ class MessageBox:
         frame.pack(fill="both", expand=True)
         self.parent.wait_window(self.dialog)
 
-    def close_dialog(self):
+    def close_dialog(self) -> None:
+        """Function to close the message box."""
         self.dialog.destroy()
 
 
 class TicTacToeGUI:
-    def __init__(self, root: tk.CTk):
+    def __init__(self, root: tk.CTk) -> None:
+        """Class to create the Tic Tac Toe game GUI.
+
+        Args:
+            root (tk.CTk): The root window.
+        """
         self.root = root
         self.root.title("Tic Tac Toe")
         self.root.resizable(False, False)
@@ -115,17 +128,20 @@ class TicTacToeGUI:
         self.create.place(x=80, y=100)
         self.join.place(x=80, y=160)
 
-    def set_icon(self):
+    def set_icon(self) -> None:
+        """Function to set the icon of the window."""
         self.root.iconphoto(False, self.icon)
 
-    def back(self):
+    def back(self) -> None:
+        """Function to go back to the previous frame."""
         if self.frames:
             self.current.place_forget()
             prev = self.frames.pop()
             prev.place(y=25)
             self.current = prev
 
-    def new_game(self):
+    def new_game(self) -> None:
+        """Function to create a new game."""
         self.first_frame.place_forget()
         self.second_frame.place(y=25)
         self.current = self.second_frame
@@ -153,25 +169,30 @@ class TicTacToeGUI:
         self.computer.place(x=80, y=130)
         self.room.place(x=80, y=180)
 
-    def vs_player(self):
+    def vs_player(self) -> None:
+        """Function to start a game against another player."""
         self.game_mode = "player"
         self.create_board()
 
-    def vs_computer(self):
+    def vs_computer(self) -> None:
+        """Function to start a game against the computer."""
         self.game_mode = "computer"
         self.create_board()
 
-    def multi(self):
+    def multi(self) -> None:
+        """Function to create a multiplayer game."""
         MessageBox(
             self.root,
             "Coming Soon!",
             "This feature is not yet ready."
         )
 
-    def join_game(self):
+    def join_game(self) -> None:
+        """Function to join a multiplayer game."""
         self.multi()
 
-    def create_board(self):
+    def create_board(self) -> None:
+        """Function to create the game board."""
         self.second_frame.place_forget()
         self.third_frame.place(y=25)
         self.current = self.third_frame
@@ -199,7 +220,13 @@ class TicTacToeGUI:
                     row=i, column=j, padx=2, pady=2, sticky="nsew"
                 )
 
-    def make_move(self, row: int, col: int):
+    def make_move(self, row: int, col: int) -> None:
+        """Function to make a move on the game board.
+
+        Args:
+            row (int): The row of the move.
+            col (int): The column of the move.
+        """
         if self.board[row][col] == "":
             self.board[row][col] = self.current_player
             text_color = (("gray14", "#FFFFFF")
@@ -224,14 +251,23 @@ class TicTacToeGUI:
                 if self.game_mode == "computer" and self.current_player == "O":
                     self.computer_move()
 
-    def reset_board(self):
+    def reset_board(self) -> None:
+        """Function to reset the game board."""
         self.current_player = "X"
         self.board = [["" for _ in range(3)] for _ in range(3)]
         for i in range(3):
             for j in range(3):
                 self.buttons[i][j].configure(text="")
 
-    def is_winner(self, player=None):
+    def is_winner(self, player=None) -> bool:
+        """Function to check if a player has won.
+
+        Args:
+            player (str, optional): The player to check for. Defaults to None.
+
+        Returns:
+            bool: True if the player has won, False otherwise.
+        """
         if not player:
             player = self.current_player
         for i in range(3):
@@ -243,10 +279,20 @@ class TicTacToeGUI:
             return True
         return False
 
-    def is_draw(self):
+    def is_draw(self) -> bool:
+        """Function to check if the game is a draw.
+
+        Returns:
+            bool: True if the game is a draw, False otherwise.
+        """
         return all(self.board[i][j] != "" for i in range(3) for j in range(3))
 
-    def get_empty_cells(self):
+    def get_empty_cells(self) -> list:
+        """Function to get the empty cells on the game board.
+
+        Returns:
+            list: A list of tuples representing the empty cells.
+        """
         return [
             (i, j)
             for i in range(3)
@@ -254,12 +300,22 @@ class TicTacToeGUI:
             if self.board[i][j] == ""
         ]
 
-    def computer_move(self):
+    def computer_move(self) -> None:
+        """Function to make a move for the computer."""
         move = self.get_best_move()
         self.make_move(move[0], move[1])
         pass
 
-    def minimax(self, depth, is_maximizing):
+    def minimax(self, depth: int, is_maximizing: bool) -> int:
+        """Function to calculate the minimax score.
+
+        Args:
+            depth (int): The depth of the search.
+            is_maximizing (bool): True if maximizing, False otherwise.
+
+        Returns:
+            int: The minimax score.
+        """
         if self.is_winner('X'):
             return -1
         if self.is_winner('O'):
@@ -284,7 +340,12 @@ class TicTacToeGUI:
                 best_score = min(best_score, score)
             return best_score
 
-    def get_best_move(self):
+    def get_best_move(self) -> tuple:
+        """Function to get the best move for the computer.
+
+        Returns:
+            tuple: A tuple representing the best move.
+        """
         best_score = -float('inf')
         best_move = None
         for i, j in self.get_empty_cells():
